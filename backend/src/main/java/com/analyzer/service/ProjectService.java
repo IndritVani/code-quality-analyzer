@@ -2,7 +2,7 @@ package com.analyzer.service;
 
 import com.analyzer.domain.AnalysisRun;
 import com.analyzer.domain.Project;
-import com.analyzer.domain.Tier;
+import com.analyzer.domain.SourceType;
 import com.analyzer.dto.CreateProjectRequest;
 import com.analyzer.repository.AnalysisRunRepository;
 import com.analyzer.repository.FileMetricsRepository;
@@ -21,27 +21,46 @@ public class ProjectService {
     private final AnalysisRunRepository analysisRunRepository;
     private final ProjectMetricsRepository projectMetricsRepository;
     private final FileMetricsRepository fileMetricsRepository;
+    private final GitRepositoryService gitRepositoryService;
 
     public ProjectService(ProjectRepository projectRepository,
                           AnalysisRunRepository analysisRunRepository,
                           ProjectMetricsRepository projectMetricsRepository,
-                          FileMetricsRepository fileMetricsRepository) {
+                          FileMetricsRepository fileMetricsRepository,
+                          GitRepositoryService gitRepositoryService) {
         this.projectRepository = projectRepository;
         this.analysisRunRepository = analysisRunRepository;
         this.projectMetricsRepository = projectMetricsRepository;
         this.fileMetricsRepository = fileMetricsRepository;
+        this.gitRepositoryService = gitRepositoryService;
     }
 
     @Transactional
     public Project create(CreateProjectRequest request) {
+        SourceType sourceType = request.sourceType() == null ? SourceType.LOCAL : request.sourceType();
+
         Project project = new Project();
         project.setName(request.name());
         project.setDescription(request.description());
-        project.setPath(request.path());
+        project.setSourceType(sourceType);
         project.setTier(request.tier());
         if (request.language() != null && !request.language().isBlank()) {
             project.setLanguage(request.language());
         }
+
+        if (sourceType == SourceType.GITHUB) {
+            if (request.repoUrl() == null || request.repoUrl().isBlank()) {
+                throw new BadRequestException("A GitHub repository URL is required for GitHub projects.");
+            }
+            // Validates and normalizes; throws BadRequestException on a malformed URL.
+            project.setRepoUrl(gitRepositoryService.normalizeGithubUrl(request.repoUrl()));
+        } else {
+            if (request.path() == null || request.path().isBlank()) {
+                throw new BadRequestException("A local repository path is required for local projects.");
+            }
+            project.setPath(request.path());
+        }
+
         return projectRepository.save(project);
     }
 

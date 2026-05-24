@@ -9,7 +9,7 @@ import {
 } from '../api/client.js';
 import ProjectTable from '../components/ProjectTable.jsx';
 
-const BLANK = { name: '', description: '', path: '', tier: 'average' };
+const BLANK = { name: '', description: '', path: '', repoUrl: '', sourceType: 'local', tier: 'average' };
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const describe = (e) => e?.response?.data?.message || e?.message || 'Request failed';
 
@@ -119,14 +119,51 @@ export default function Overview() {
             </select>
           </div>
           <div className="full">
-            <label>Local repository path (absolute)</label>
-            <input
-              required
-              value={form.path}
-              onChange={(e) => setForm({ ...form, path: e.target.value })}
-              placeholder="C:/Users/you/repos/spring-petclinic"
-            />
+            <label>Source</label>
+            <div style={{ display: 'flex', gap: '1.25rem' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontWeight: 400 }}>
+                <input
+                  type="radio"
+                  name="sourceType"
+                  style={{ width: 'auto' }}
+                  checked={form.sourceType === 'local'}
+                  onChange={() => setForm({ ...form, sourceType: 'local' })}
+                />
+                Local path
+              </label>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontWeight: 400 }}>
+                <input
+                  type="radio"
+                  name="sourceType"
+                  style={{ width: 'auto' }}
+                  checked={form.sourceType === 'github'}
+                  onChange={() => setForm({ ...form, sourceType: 'github' })}
+                />
+                GitHub URL
+              </label>
+            </div>
           </div>
+          {form.sourceType === 'github' ? (
+            <div className="full">
+              <label>GitHub repository URL</label>
+              <input
+                required
+                value={form.repoUrl}
+                onChange={(e) => setForm({ ...form, repoUrl: e.target.value })}
+                placeholder="https://github.com/spring-projects/spring-petclinic"
+              />
+            </div>
+          ) : (
+            <div className="full">
+              <label>Local repository path (absolute)</label>
+              <input
+                required
+                value={form.path}
+                onChange={(e) => setForm({ ...form, path: e.target.value })}
+                placeholder="C:/Users/you/repos/spring-petclinic"
+              />
+            </div>
+          )}
           <div className="full">
             <label>Description</label>
             <input

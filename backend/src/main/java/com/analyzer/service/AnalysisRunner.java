@@ -13,6 +13,9 @@ import java.util.UUID;
 /**
  * Runs analysis off the request thread. Each DB transition delegates to {@link AnalysisService}
  * (a separate bean) so transactional boundaries apply correctly under {@code @Async}.
+ *
+ * <p>For GitHub-sourced projects the repo is shallow-cloned to a temp directory before analysis
+ * and deleted afterward; local projects are analyzed in place.
  */
 @Component
 public class AnalysisRunner {
@@ -21,21 +24,37 @@ public class AnalysisRunner {
 
     private final AnalysisService analysisService;
     private final AnalyzerEngine analyzerEngine;
+    private final GitRepositoryService gitRepositoryService;
 
-    public AnalysisRunner(AnalysisService analysisService, AnalyzerEngine analyzerEngine) {
+    public AnalysisRunner(AnalysisService analysisService,
+                          AnalyzerEngine analyzerEngine,
+                          GitRepositoryService gitRepositoryService) {
         this.analysisService = analysisService;
         this.analyzerEngine = analyzerEngine;
+        this.gitRepositoryService = gitRepositoryService;
     }
 
     @Async
     public void run(UUID runId) {
+        Path cloneDir = null;
         try {
-            String projectPath = analysisService.beginRun(runId);
-            AnalysisResult result = analyzerEngine.run(Path.of(projectPath));
+            RunTarget target = analysisService.beginRun(runId);
+            Path projectRoot;
+            if (target.isGithub()) {
+                cloneDir = gitRepositoryService.cloneToTempDir(target.repoUrl());
+                projectRoot = cloneDir;
+            } else {
+                projectRoot = Path.of(target.path());
+            }
+            AnalysisResult result = analyzerEngine.run(projectRoot);
             analysisService.completeRun(runId, result);
         } catch (Exception e) {
             log.error("Analysis run {} failed", runId, e);
             analysisService.failRun(runId, e.getMessage());
+        } finally {
+            if (cloneDir != null) {
+                gitRepositoryService.cleanup(cloneDir);
+            }
         }
     }
 }

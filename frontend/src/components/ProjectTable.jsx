@@ -12,6 +12,7 @@ export default function ProjectTable({ rows, busyId, onAnalyze, onDelete }) {
         <tr>
           <th>Name</th>
           <th>Tier</th>
+          <th>Source</th>
           <th>Maintainability</th>
           <th>Status</th>
           <th>Last analyzed</th>
@@ -23,6 +24,15 @@ export default function ProjectTable({ rows, busyId, onAnalyze, onDelete }) {
           <tr key={row.id}>
             <td><Link to={`/projects/${row.id}`}>{row.name}</Link></td>
             <td><TierBadge tier={row.tier} /></td>
+            <td className="muted">
+              {row.sourceType === 'github' && row.repoUrl ? (
+                <a href={row.repoUrl.replace(/\.git$/, '')} target="_blank" rel="noreferrer">
+                  GitHub ↗
+                </a>
+              ) : (
+                'Local'
+              )}
+            </td>
             <td className={scoreClass(row.mi)} style={{ fontWeight: 700 }}>
               {row.mi == null ? '—' : fmt(row.mi, 1)}
             </td>

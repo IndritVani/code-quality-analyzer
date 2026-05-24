@@ -27,8 +27,17 @@ public class Project {
     @Column(columnDefinition = "text")
     private String description;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    private SourceType sourceType = SourceType.LOCAL;
+
+    /** Absolute filesystem path for LOCAL projects; null for GITHUB projects. */
+    @Column
     private String path;
+
+    /** Clone URL for GITHUB projects; null for LOCAL projects. */
+    @Column
+    private String repoUrl;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -49,6 +58,9 @@ public class Project {
         }
         if (language == null || language.isBlank()) {
             language = "java";
+        }
+        if (sourceType == null) {
+            sourceType = SourceType.LOCAL;
         }
     }
 
@@ -72,12 +84,28 @@ public class Project {
         this.description = description;
     }
 
+    public SourceType getSourceType() {
+        return sourceType;
+    }
+
+    public void setSourceType(SourceType sourceType) {
+        this.sourceType = sourceType;
+    }
+
     public String getPath() {
         return path;
     }
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getRepoUrl() {
+        return repoUrl;
+    }
+
+    public void setRepoUrl(String repoUrl) {
+        this.repoUrl = repoUrl;
     }
 
     public Tier getTier() {

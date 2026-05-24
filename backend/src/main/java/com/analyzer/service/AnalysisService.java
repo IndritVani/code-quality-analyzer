@@ -50,14 +50,15 @@ public class AnalysisService {
         return analysisRunRepository.save(new AnalysisRun(project));
     }
 
-    /** Transition to RUNNING and return the project path to analyze. */
+    /** Transition to RUNNING and return what the run should analyze (local path or GitHub repo). */
     @Transactional
-    public String beginRun(UUID runId) {
+    public RunTarget beginRun(UUID runId) {
         AnalysisRun run = requireRun(runId);
         run.setStatus(RunStatus.RUNNING);
         run.setStartedAt(Instant.now());
         analysisRunRepository.save(run);
-        return run.getProject().getPath();
+        Project project = run.getProject();
+        return new RunTarget(project.getSourceType(), project.getPath(), project.getRepoUrl());
     }
 
     @Transactional
