@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: code-analyzer-db
+    environment:
+      POSTGRES_DB: code_analyzer
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - analyzer-pgdata:/var/lib/postgresql/data
+
+volumes:
+  analyzer-pgdata:

@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/code_analyzer
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    open-in-view: false
+
+server:
+  port: 8080
+
+analyzer:
+  # Best-effort outdated-dependency check against Maven Central. Disable to keep
+  # analysis fully offline / fast.
+  dependency-check:
+    enabled: true
+    timeout-ms: 2000
