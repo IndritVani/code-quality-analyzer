@@ -2,6 +2,7 @@ package com.analyzer.service;
 
 import com.analyzer.analyzer.pipeline.AnalysisResult;
 import com.analyzer.analyzer.pipeline.ResultPersister;
+import com.analyzer.analyzer.pipeline.TierClassifier;
 import com.analyzer.domain.AnalysisRun;
 import com.analyzer.domain.Project;
 import com.analyzer.domain.ProjectMetrics;
@@ -29,17 +30,20 @@ public class AnalysisService {
     private final ProjectMetricsRepository projectMetricsRepository;
     private final FileMetricsRepository fileMetricsRepository;
     private final ResultPersister resultPersister;
+    private final TierClassifier tierClassifier;
 
     public AnalysisService(ProjectRepository projectRepository,
                            AnalysisRunRepository analysisRunRepository,
                            ProjectMetricsRepository projectMetricsRepository,
                            FileMetricsRepository fileMetricsRepository,
-                           ResultPersister resultPersister) {
+                           ResultPersister resultPersister,
+                           TierClassifier tierClassifier) {
         this.projectRepository = projectRepository;
         this.analysisRunRepository = analysisRunRepository;
         this.projectMetricsRepository = projectMetricsRepository;
         this.fileMetricsRepository = fileMetricsRepository;
         this.resultPersister = resultPersister;
+        this.tierClassifier = tierClassifier;
     }
 
     /** Create a PENDING run and commit it so the async worker can pick it up. */
@@ -71,6 +75,8 @@ public class AnalysisService {
 
         Project project = run.getProject();
         project.setAnalyzedAt(Instant.now());
+        // Derive the project's tier from the freshly computed Maintainability Index.
+        project.setTier(tierClassifier.classify(result.summary().maintainabilityIndex()));
         projectRepository.save(project);
     }
 

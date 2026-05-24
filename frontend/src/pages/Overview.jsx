@@ -9,7 +9,7 @@ import {
 } from '../api/client.js';
 import ProjectTable from '../components/ProjectTable.jsx';
 
-const BLANK = { name: '', description: '', path: '', repoUrl: '', sourceType: 'local', tier: 'average' };
+const BLANK = { name: '', description: '', path: '', repoUrl: '', sourceType: 'local' };
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const describe = (e) => e?.response?.data?.message || e?.message || 'Request failed';
 
@@ -109,14 +109,6 @@ export default function Overview() {
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               placeholder="spring-petclinic"
             />
-          </div>
-          <div>
-            <label>Tier</label>
-            <select value={form.tier} onChange={(e) => setForm({ ...form, tier: e.target.value })}>
-              <option value="well_maintained">Well maintained</option>
-              <option value="average">Average</option>
-              <option value="neglected">Neglected</option>
-            </select>
           </div>
           <div className="full">
             <label>Source</label>

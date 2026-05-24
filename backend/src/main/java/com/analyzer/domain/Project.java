@@ -41,7 +41,7 @@ public class Project {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Tier tier;
+    private Tier tier = Tier.UNRATED;
 
     @Column(nullable = false)
     private String language = "java";
@@ -61,6 +61,9 @@ public class Project {
         }
         if (sourceType == null) {
             sourceType = SourceType.LOCAL;
+        }
+        if (tier == null) {
+            tier = Tier.UNRATED;
         }
     }
 

@@ -43,7 +43,7 @@ public class ProjectService {
         project.setName(request.name());
         project.setDescription(request.description());
         project.setSourceType(sourceType);
-        project.setTier(request.tier());
+        // Tier is left at its UNRATED default; it is derived later from analysis results.
         if (request.language() != null && !request.language().isBlank()) {
             project.setLanguage(request.language());
         }

@@ -82,6 +82,7 @@ tbody tr:hover { background: var(--panel-2); }
 .badge.well_maintained { background: rgba(34,197,94,0.15); color: var(--good); }
 .badge.average { background: rgba(245,158,11,0.15); color: var(--warn); }
 .badge.neglected { background: rgba(239,68,68,0.15); color: var(--bad); }
+.badge.unrated { background: rgba(148,163,184,0.15); color: var(--muted); }
 
 .status { font-size: 0.8rem; font-weight: 600; }
 .status.complete { color: var(--good); }

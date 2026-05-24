@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 public enum Tier {
     WELL_MAINTAINED,
     AVERAGE,
-    NEGLECTED;
+    NEGLECTED,
+    /** Assigned to projects that have not yet been analyzed; the analysis derives the rest. */
+    UNRATED;
 
     /** Accept tier values case-insensitively from the API (e.g. "well_maintained"). */
     @JsonCreator
