@@ -46,6 +46,8 @@ public class ResultPersister {
         metrics.setOutdatedDependencies(summary.outdatedDependencies());
         metrics.setAvgCoupling(summary.avgCoupling());
         metrics.setCommentDensity(summary.commentDensity());
+        metrics.setAvgVolume(summary.avgVolume());
+        metrics.setAvgLoc(summary.avgLoc());
         metrics.setMaintainabilityIndex(summary.maintainabilityIndex());
         projectMetricsRepository.save(metrics);
     }

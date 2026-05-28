@@ -10,6 +10,8 @@ public record ProjectMetricsResponse(
         int outdatedDependencies,
         double avgCoupling,
         double commentDensity,
+        double avgVolume,
+        double avgLoc,
         double maintainabilityIndex) {
 
     public static ProjectMetricsResponse from(ProjectMetrics m) {
@@ -21,6 +23,8 @@ public record ProjectMetricsResponse(
                 m.getOutdatedDependencies(),
                 m.getAvgCoupling(),
                 m.getCommentDensity(),
+                m.getAvgVolume(),
+                m.getAvgLoc(),
                 m.getMaintainabilityIndex());
     }
 }

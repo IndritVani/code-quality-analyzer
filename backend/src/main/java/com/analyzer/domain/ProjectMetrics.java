@@ -31,6 +31,12 @@ public class ProjectMetrics {
     private int outdatedDependencies;
     private double avgCoupling;
     private double commentDensity;
+    // Added after initial release: a SQL default lets ddl-auto=update backfill existing rows with 0,
+    // so loading a historical row doesn't fail mapping NULL into a primitive double.
+    @Column(columnDefinition = "double precision default 0")
+    private double avgVolume;
+    @Column(columnDefinition = "double precision default 0")
+    private double avgLoc;
     private double maintainabilityIndex;
 
     protected ProjectMetrics() {
@@ -102,6 +108,22 @@ public class ProjectMetrics {
 
     public void setCommentDensity(double commentDensity) {
         this.commentDensity = commentDensity;
+    }
+
+    public double getAvgVolume() {
+        return avgVolume;
+    }
+
+    public void setAvgVolume(double avgVolume) {
+        this.avgVolume = avgVolume;
+    }
+
+    public double getAvgLoc() {
+        return avgLoc;
+    }
+
+    public void setAvgLoc(double avgLoc) {
+        this.avgLoc = avgLoc;
     }
 
     public double getMaintainabilityIndex() {

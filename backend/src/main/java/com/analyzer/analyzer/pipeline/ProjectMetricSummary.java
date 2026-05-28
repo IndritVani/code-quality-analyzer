@@ -9,5 +9,7 @@ public record ProjectMetricSummary(
         int outdatedDependencies,
         double avgCoupling,
         double commentDensity,
+        double avgVolume,
+        double avgLoc,
         double maintainabilityIndex) {
 }

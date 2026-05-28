@@ -15,6 +15,7 @@ public class FileMetricResult {
     private Double maxCyclomatic;
     private Integer coupling;
     private Double commentDensity;
+    private Double volume;
 
     public FileMetricResult(String filePath) {
         this.filePath = filePath;
@@ -31,6 +32,7 @@ public class FileMetricResult {
         if (maxCyclomatic == null) maxCyclomatic = other.maxCyclomatic;
         if (coupling == null) coupling = other.coupling;
         if (commentDensity == null) commentDensity = other.commentDensity;
+        if (volume == null) volume = other.volume;
     }
 
     public String getFilePath() {
@@ -61,6 +63,10 @@ public class FileMetricResult {
         return commentDensity == null ? 0.0 : commentDensity;
     }
 
+    public double volume() {
+        return volume == null ? 0.0 : volume;
+    }
+
     public void setLoc(int loc) {
         this.loc = loc;
     }
@@ -83,5 +89,9 @@ public class FileMetricResult {
 
     public void setCommentDensity(double commentDensity) {
         this.commentDensity = commentDensity;
+    }
+
+    public void setVolume(double volume) {
+        this.volume = volume;
     }
 }

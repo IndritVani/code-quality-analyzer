@@ -1,7 +1,8 @@
 package com.analyzer.analyzer.pipeline;
 
-import com.analyzer.domain.Tier;
 import org.springframework.stereotype.Component;
+
+import com.analyzer.domain.Tier;
 
 /**
  * Derives a project {@link Tier} from its Maintainability Index. The thresholds mirror the
@@ -11,8 +12,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class TierClassifier {
 
-    static final double WELL_MAINTAINED_MIN = 75.0;
-    static final double AVERAGE_MIN = 50.0;
+    static final double WELL_MAINTAINED_MIN = 85.0;
+    static final double AVERAGE_MIN = 70.0;
 
     public Tier classify(double maintainabilityIndex) {
         if (maintainabilityIndex >= WELL_MAINTAINED_MIN) {

@@ -122,6 +122,7 @@ export default function ProjectDetail() {
               <MetricCard label="Duplication" value={pct(m.duplicationRatio)} />
               <MetricCard label="Avg Coupling" value={fmt(m.avgCoupling, 2)} hint="external refs / file" />
               <MetricCard label="Comment Density" value={pct(m.commentDensity)} />
+              <MetricCard label="Avg Volume" value={fmt(m.avgVolume, 0)} hint="Halstead, per file" />
               <MetricCard label="Outdated Deps" value={m.outdatedDependencies} />
             </div>
           </section>
