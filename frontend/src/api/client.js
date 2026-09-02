@@ -16,4 +16,6 @@ export const getRunFiles = (runId) => api.get(`/runs/${runId}/files`).then((r) =
 export const compareProjects = (ids) =>
   api.get('/compare', { params: { ids: ids.join(',') } }).then((r) => r.data);
 
+export const getMiWeights = () => api.get('/config/maintainability').then((r) => r.data);
+
 export default api;

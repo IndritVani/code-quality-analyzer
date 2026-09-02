@@ -3,8 +3,8 @@ import { miBreakdown } from '../lib/metrics.js';
 
 const colorFor = (kind) => (kind === 'bonus' ? '#22c55e' : kind === 'base' ? '#38bdf8' : '#ef4444');
 
-export default function ScoreBreakdown({ metrics }) {
-  const data = miBreakdown(metrics).map((d) => ({ ...d, value: Number(d.value.toFixed(2)) }));
+export default function ScoreBreakdown({ metrics, weights }) {
+  const data = miBreakdown(metrics, weights).map((d) => ({ ...d, value: Number(d.value.toFixed(2)) }));
   return (
     <div style={{ width: '100%', height: 280 }}>
       <ResponsiveContainer>

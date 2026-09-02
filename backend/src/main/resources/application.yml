@@ -22,3 +22,22 @@ analyzer:
   dependency-check:
     enabled: true
     timeout-ms: 2000
+  # Maintainability Index factor weights. Defaults reproduce the original score.
+  # Change a value, restart, then re-run an analysis to apply.
+  mi:
+    base-weight: 1.0
+    base:
+      constant: 171.0
+      volume-coefficient: 5.2
+      complexity-coefficient: 0.23
+      loc-coefficient: 16.2
+    # Linear remap of the raw SEI base to an intuitive 0–100 display: display = offset + slope*base.
+    # Defaults stretch good code (~44) to ~83 and weak code (~20) to ~40. Retune to re-anchor.
+    scale:
+      offset: 4.0
+      slope: 1.8
+    duplication-weight: 15.0
+    coupling-weight: 10.0
+    documentation-weight: 10.0
+    coupling-cap: 20.0
+    comment-cap: 0.30

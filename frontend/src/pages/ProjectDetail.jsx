@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { analyzeProject, getProject, getRun, getRunFiles, getRuns } from '../api/client.js';
+import { analyzeProject, getMiWeights, getProject, getRun, getRunFiles, getRuns } from '../api/client.js';
 import MetricCard from '../components/MetricCard.jsx';
 import ScoreBreakdown from '../components/ScoreBreakdown.jsx';
 import TierBadge from '../components/TierBadge.jsx';
@@ -14,6 +14,7 @@ export default function ProjectDetail() {
   const [project, setProject] = useState(null);
   const [run, setRun] = useState(null);
   const [files, setFiles] = useState([]);
+  const [weights, setWeights] = useState(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -21,8 +22,9 @@ export default function ProjectDetail() {
   async function load() {
     setLoading(true);
     try {
-      const [proj, runs] = await Promise.all([getProject(id), getRuns(id)]);
+      const [proj, runs, miWeights] = await Promise.all([getProject(id), getRuns(id), getMiWeights()]);
       setProject(proj);
+      setWeights(miWeights);
       const latest = runs[0] || null;
       setRun(latest);
       if (latest && latest.status === 'complete') {
@@ -109,7 +111,7 @@ export default function ProjectDetail() {
             </div>
             <div style={{ flex: 1 }}>
               <h3 style={{ marginTop: 0, fontSize: '0.95rem' }}>Score breakdown</h3>
-              <ScoreBreakdown metrics={m} />
+              <ScoreBreakdown metrics={m} weights={weights} />
             </div>
           </section>
 
